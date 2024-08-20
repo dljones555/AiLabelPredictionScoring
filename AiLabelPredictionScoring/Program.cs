@@ -32,7 +32,7 @@ Console.WriteLine($"F1 Score: {scorer.F1Score:F2}");
 Console.WriteLine("\nDetailed Results:");
 foreach (var dataItem in trainingData)
 {
-    string resultType = DetermineResultType(dataItem, prediction.TargetLabel);
+    string resultType = Prediction.Predict(dataItem, prediction.TargetLabel);
     Console.WriteLine($"Text: {dataItem.ItemDescription}");
     Console.WriteLine($"Actual Label: {dataItem.ActualLabel}");
     Console.WriteLine($"Predicted Label: {dataItem.PredictedLabel}");
@@ -51,15 +51,7 @@ static List<TrainingData> LoadTrainingData(string filePath)
 }
 
 // Method to determine if the item is TP, FP, FN, or TN
-static string DetermineResultType(TrainingData dataItem, string targetLabel) =>
-    (dataItem.ActualLabel, dataItem.PredictedLabel) switch
-    {
-        var (actual, predicted) when actual == targetLabel && predicted == targetLabel => "True Positive (TP)",
-        var (actual, predicted) when actual != targetLabel && predicted == targetLabel => "False Positive (FP)",
-        var (actual, predicted) when actual == targetLabel && predicted != targetLabel => "False Negative (FN)",
-        var (actual, predicted) when actual != targetLabel && predicted != targetLabel => "True Negative (TN)",
-        _ => "Unknown"
-    };
+
 
 // Using record classes with init properties for deserialization
 public record TrainingData
@@ -87,6 +79,16 @@ public record Prediction(List<TrainingData> Data, string TargetLabel)
     public int FalsePositives => Data.Count(kv => kv.ActualLabel != TargetLabel && kv.PredictedLabel == TargetLabel);
     public int FalseNegatives => Data.Count(kv => kv.ActualLabel == TargetLabel && kv.PredictedLabel != TargetLabel);
     public int TrueNegatives => Data.Count(kv => kv.ActualLabel != TargetLabel && kv.PredictedLabel != TargetLabel);
+
+    public static string Predict(TrainingData dataItem, string targetLabel) =>
+    (dataItem.ActualLabel, dataItem.PredictedLabel) switch
+    {
+        var (actual, predicted) when actual == targetLabel && predicted == targetLabel => "True Positive (TP)",
+        var (actual, predicted) when actual != targetLabel && predicted == targetLabel => "False Positive (FP)",
+        var (actual, predicted) when actual == targetLabel && predicted != targetLabel => "False Negative (FN)",
+        var (actual, predicted) when actual != targetLabel && predicted != targetLabel => "True Negative (TN)",
+        _ => "Unknown"
+    };
 }
 
 // Scorer class with methods to calculate metrics
@@ -105,15 +107,20 @@ public class Scorer
 
     public void Score()
     {
-        // Precision: TP / (TP + FP)
+        // Precision: Measures the accuracy of positive predictions (i.e., the percentage of correctly identified tacos 
+        // among all items predicted to be tacos). Precision = TP / (TP + FP)
         Precision = (double)_prediction.TruePositives / (_prediction.TruePositives + _prediction.FalsePositives);
 
-        // Recall: TP / (TP + FN)
+        // Recall (or Sensitivity): Measures the ability to identify all positive examples (i.e., the percentage of tacos
+        // correctly identified among all actual tacos). Recall = TP / (TP + FN)
         Recall = (double)_prediction.TruePositives / (_prediction.TruePositives + _prediction.FalseNegatives);
 
-        // F1 Score: 2 * (Precision * Recall) / (Precision + Recall)
+        // F1 Score: The harmonic mean of Precision and Recall, providing a single metric that balances both concerns.
+        // It is useful when there is an uneven class distribution, and we want a balance between precision and recall.
+        // F1 Score = 2 * (Precision * Recall) / (Precision + Recall)
         F1Score = 2 * (Precision * Recall) / (Precision + Recall);
     }
+
 
     public void DisplayConfusionMatrix()
     {
