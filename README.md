@@ -1,6 +1,6 @@
 # AiLabelPredictionScoring
 
-Note: to explore this, I used OpenAI ChatGPT to prompt and direction generation of this project. 
+Note: to explore this, I used OpenAI ChatGPT to prompt and direct generation of this project. 
 
 Explanation of Metrics:
 
