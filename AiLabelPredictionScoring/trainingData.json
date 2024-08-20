@@ -1,0 +1,39 @@
+{
+  "data": [
+    {
+      "ItemDescription": "Meat encased in crispy corn shells with guacamole and pico de gallo",
+      "ActualLabel": "taco",
+      "PredictedLabel": "taco"
+    },
+    {
+      "ItemDescription": "Grilled beef patty with lettuce, tomato, and a sesame seed bun",
+      "ActualLabel": "burger",
+      "PredictedLabel": "taco"
+    },
+    {
+      "ItemDescription": "Meat encased in crispy corn shells with guacamole and pico de gallo",
+      "ActualLabel": "taco",
+      "PredictedLabel": "burrito"
+    },
+    {
+      "ItemDescription": "Large flour tortilla wrapped around meat and beans",
+      "ActualLabel": "burrito",
+      "PredictedLabel": "burrito"
+    },
+    {
+      "ItemDescription": "Large flour tortilla wrapped around meat and beans",
+      "ActualLabel": "burrito",
+      "PredictedLabel": "taco"
+    },
+    {
+      "ItemDescription": "Meat encased in crispy corn shells with guacamole and pico de gallo",
+      "ActualLabel": "taco",
+      "PredictedLabel": "taco"
+    },
+    {
+      "ItemDescription": "Grilled beef patty with lettuce, tomato, and a sesame seed bun",
+      "ActualLabel": "burger",
+      "PredictedLabel": "burger"
+    }
+  ]
+}
