@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-// Simple simulation to illustrate and understand Precision, Recall and Precision
+// Simple simulation to illustrate and understand Precision, Recall and F1 Score
 
 // Top-level statements
 var fileName = "trainingData.json";
