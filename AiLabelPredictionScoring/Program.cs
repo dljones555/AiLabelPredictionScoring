@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 
 // Simple simulation to illustrate and understand Precision, Recall and F1 Score
 
@@ -46,34 +45,20 @@ Console.ReadLine();
 static List<TrainingData> LoadTrainingData(string filePath)
 {
     string jsonString = File.ReadAllText(filePath);
-    var jsonData = JsonSerializer.Deserialize<TrainingDataContainer>(jsonString);
-    return jsonData?.Data ?? new List<TrainingData>();
+    var jsonData = JsonSerializer.Deserialize<List<TrainingData>>(jsonString);
+    return jsonData ?? new List<TrainingData>();
 }
-
-// Method to determine if the item is TP, FP, FN, or TN
-
 
 // Using record classes with init properties for deserialization
 public record TrainingData
 {
-    [JsonPropertyName("ItemDescription")]
-    public string ItemDescription { get; init; }
-
-    [JsonPropertyName("ActualLabel")]
-    public string ActualLabel { get; init; }
-
-    [JsonPropertyName("PredictedLabel")]
-    public string PredictedLabel { get; init; }
-}
-
-public record TrainingDataContainer
-{
-    [JsonPropertyName("data")]
-    public List<TrainingData> Data { get; init; }
+    public required string ItemDescription { get; init; }
+    public required string ActualLabel { get; init; }
+    public required string PredictedLabel { get; init; }
 }
 
 // Prediction class, using records with calculated properties
-public record Prediction(List<TrainingData> Data, string TargetLabel)
+public record Prediction(IList<TrainingData> Data, string TargetLabel)
 {
     public int TruePositives => Data.Count(kv => kv.ActualLabel == TargetLabel && kv.PredictedLabel == TargetLabel);
     public int FalsePositives => Data.Count(kv => kv.ActualLabel != TargetLabel && kv.PredictedLabel == TargetLabel);
@@ -107,12 +92,12 @@ public class Scorer
 
     public void Score()
     {
-        // Precision: Measures the accuracy of positive predictions (i.e., the percentage of correctly identified tacos 
-        // among all items predicted to be tacos). Precision = TP / (TP + FP)
+        // Precision: Measures the accuracy of positive predictions (i.e., the percentage of correctly identified target objects 
+        // among all items predicted to be target objects). Precision = TP / (TP + FP)
         Precision = (double)_prediction.TruePositives / (_prediction.TruePositives + _prediction.FalsePositives);
 
-        // Recall (or Sensitivity): Measures the ability to identify all positive examples (i.e., the percentage of tacos
-        // correctly identified among all actual tacos). Recall = TP / (TP + FN)
+        // Recall (or Sensitivity): Measures the ability to identify all positive examples (i.e., the percentage of target objects
+        // correctly identified among all actual target objects). Recall = TP / (TP + FN)
         Recall = (double)_prediction.TruePositives / (_prediction.TruePositives + _prediction.FalseNegatives);
 
         // F1 Score: The harmonic mean of Precision and Recall, providing a single metric that balances both concerns.

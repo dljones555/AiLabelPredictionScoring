@@ -1,5 +1,4 @@
-{
-  "data": [
+[
     {
       "ItemDescription": "Meat encased in crispy corn shells with guacamole and pico de gallo",
       "ActualLabel": "taco",
@@ -35,5 +34,4 @@
       "ActualLabel": "burger",
       "PredictedLabel": "burger"
     }
-  ]
-}
+]
